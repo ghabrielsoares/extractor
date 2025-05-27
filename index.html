@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EXTRATOR PromQL</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <img src="icons/code.png" alt="Logo" class="logo">
+    <h1>EXTRATOR PromQL</h1>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-button active" data-tab="jsonTab">JSON</button>
+    <button class="tab-button" data-tab="tagTab">TAG</button>
+    <button class="tab-button" data-tab="tituloTab">TÍTULO</button>
+  </div>
+
+  <div class="tab-content active" id="jsonTab">
+    <label>JSON</label>
+    <div class="editor-wrapper">
+      <textarea id="jsonInput" class="editor" placeholder="Cole aqui o conteúdo do JSON"></textarea>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tagTab">
+    <label>TAG</label>
+    <p class="helper-text">
+      Use vírgula, espaço ou quebra de linha para separar.<br>
+      Digite <code>&lt;tag&gt;</code> no título para incluir os valores.<br>
+      Use <code>&lt;v&gt;</code> ou <code>&lt;vazio&gt;</code> para representar tags "__auto".
+    </p>
+    <div class="editor-wrapper">
+      <textarea id="tagsInput" class="editor" placeholder="Ex: median, %loss, V'TAL, <v>"></textarea>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tituloTab">
+    <label>TÍTULO</label>
+    <p class="helper-text">Você pode usar os seguintes placeholders:<br><code>&lt;nome do dashboard&gt;</code>, <code>&lt;inputs&gt;</code>, <code>&lt;tag&gt;</code></p>
+    <div class="editor-wrapper">
+      <textarea id="titleInput" class="editor" placeholder="Ex: <nome do dashboard>\nEste dashboard capta informações sobre <inputs>."></textarea>
+    </div>
+  </div>
+
+  <div class="generate-button">
+    <button id="generateBtn">GERAR</button>
+  </div>
+
+  <!-- Modal -->
+  <div id="outputModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="icon-label">MD</span><img src="icons/downloads.png" alt="MD" id="downloadMd" class="icon-btn" title="Download .md">
+        <span class="icon-label">TXT</span><img src="icons/downloads.png" alt="TXT" id="downloadTxt" class="icon-btn" title="Download .txt">
+        <img src="icons/copy_azul.png" alt="Copiar" id="copyBtn" class="icon-btn" title="Copiar saída">
+        <img src="icons/delete.png" alt="Fechar" id="closeModal" class="icon-btn" title="Fechar">
+      </div>
+      <div id="outputText" class="output-area" contenteditable="true"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

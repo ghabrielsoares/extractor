@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JSON PromQL Extractor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Visualizador de JSON PromQL</h1>
+
+  <label>1. Cole o JSON:</label>
+  <textarea id="jsonInput" placeholder="Cole aqui o conteúdo do JSON"></textarea>
+
+  <label>2. Termos para buscar (separados por vírgula):</label>
+  <input type="text" id="keywordsInput" placeholder="Ex: median,%loss,V'TAL,TIM"/>
+
+  <label>3. Exibir:</label>
+  <div class="checkboxes">
+    <label><input type="checkbox" id="showDashboardName" checked> Nome do Dashboard</label>
+    <label><input type="checkbox" id="showPanelName" checked> Nome do Painel</label>
+  </div>
+
+  <label>4. Template da Introdução:</label>
+  <textarea id="headerTemplate" placeholder="<nome do dashboard>...<inputs>"></textarea>
+
+  <button id="processBtn">Processar JSON</button>
+
+  <!-- Modal de saída -->
+  <div id="outputModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span id="closeModal" class="close">&times;</span>
+        <button id="copyBtn" title="Copiar texto gerado">📋 Copiar</button>
+      </div>
+      <pre id="outputText"></pre>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
