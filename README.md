@@ -1,6 +1,7 @@
 <p align="right">
   <a href="#ex-trator-promql-pt-br">🇧🇷 Português-BR</a> |
   <a href="#ex-trator-promql-en">🇺🇸 English</a>
+  <a href="#ex-trator-promql-imgs">IMAGENS / IMAGES</a>
 </p>
 
 ---
@@ -38,6 +39,18 @@ HTML5, CSS3, JS puro (Vanilla)
 ### 💡 Exemplos de uso
 - Auditar dashboards
 - Compartilhar PromQLs com equipes
+
+---
+
+## IMAGENS / IMAGES <a name="ex-trator-promql-imgs"></a>
+
+![Pagina JSON](imgs/pg_json.png)
+
+![Pagina TAG](imgs/pg_tag.png)
+
+![Pagina TÍTULO](imgs/pg_titulo.png)
+
+![Pagina SAÍDA](imgs/pg_saida.png)
 
 ---
 
