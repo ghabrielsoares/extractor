@@ -4,46 +4,59 @@
   box-sizing: border-box;
 }
 
+:root {
+  --max-width: 95%;
+  --mobile-width: 90%;
+}
+
 body {
-  background-color: #2d2b2b;
-  color: white;
+  background-color: #282828;
+  color: rgb(255, 255, 255);
   font-family: 'Inter', sans-serif;
-  padding: 20px;
 }
 
 header {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 20px;
-  background-color: #5c5757;
-  padding: 10px 20px;
+  justify-content: center;
+  gap: 10px;
+  background-color: #3c3c3c;
+  padding: 15px 10px;
+  position: relative;
 }
 
 .logo {
-  width: 78px;
-  height: 78px;
+  width: 50px;
+  height: 50px;
+  position: static;
+  margin-bottom: 10px;
 }
 
 h1 {
-  font-size: 25px;
+  font-size: 20px;
   font-weight: bold;
+  text-align: center;
 }
 
 .tabs {
+  width: 100%;
+  max-width: 320px;
   display: flex;
   justify-content: center;
-  background-color: #3a3636;
-  padding: 10px;
-  margin-top: 20px;
-  gap: 20px;
+  background-color: #3c3c3c;
+  padding: 8px;
+  margin: 15px auto;
+  gap: 10px;
+  border-radius: 60px;
 }
 
 .tab-button {
   background-color: transparent;
   border: none;
   color: white;
-  font-size: 15px;
-  padding: 10px 20px;
+  font-size: 14px;
+  padding: 8px 15px;
   cursor: pointer;
   border-radius: 20px;
 }
@@ -54,11 +67,13 @@ h1 {
 }
 
 .tab-content {
+  width: 100%;
+  max-width: 1300px;
   display: none;
-  background-color: #8a8383;
-  margin-top: 10px;
+  background-color: #000000;
+  margin: 10px auto;
   border-radius: 10px;
-  padding: 10px;
+  padding: 8px;
 }
 
 .tab-content.active {
@@ -80,10 +95,10 @@ h1 {
 
 .editor {
   width: 100%;
-  height: 300px;
+  height: 200px;
   font-family: monospace;
-  font-size: 12px;
-  background-color: #8a8383;
+  font-size: 14px;
+  background-color: #353434;
   color: white;
   border: none;
   padding-left: 10px;
@@ -94,15 +109,27 @@ h1 {
   white-space: pre;
 }
 
-.editor::selection {
-  background: #4a9bff;
-  color: #fff;
+.editor::placeholder {
+  color: white;
+  opacity: 1;
+}
+::-moz-placeholder {
+  color: white;
+  opacity: 1;
+}
+:-ms-input-placeholder {
+  color: white;
+}
+::-ms-input-placeholder {
+  color: white;
 }
 
 .generate-button {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin: 20px auto;
+  width: 100%;
+  max-width: 320px;
 }
 
 #generateBtn {
@@ -113,16 +140,20 @@ h1 {
   border: none;
   border-radius: 25px;
   cursor: pointer;
+  width: 100%;
 }
 
 .modal {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0; 
+  left: 0;
+  width: 100%; 
+  height: 100%;
   background-color: rgba(0,0,0,0.6);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .modal.hidden {
@@ -130,11 +161,12 @@ h1 {
 }
 
 .modal-content {
-  background-color: #8a8383;
-  padding: 20px;
+  background-color: #000000;
+  padding: 15px;
   border-radius: 15px;
-  width: 80%;
-  max-height: 80%;
+  width: 95%;
+  max-width: 800px;
+  max-height: 80vh;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -149,24 +181,76 @@ h1 {
 }
 
 .icon-btn {
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
   cursor: pointer;
+  margin-left: 15px;
 }
 
 .icon-label {
   font-size: 12px;
-  margin-right: -8px;
+  margin-right: -15px;
 }
 
 .output-area {
   font-family: monospace;
   font-size: 12px;
-  background: #000;
+  background: #3c3c3c;
   color: #fff;
   padding: 10px;
   border-radius: 10px;
   overflow: auto;
   white-space: pre-wrap;
-  max-height: 500px;
+  max-height: 60vh;
+}
+
+.checkbox-label {
+  margin-top: 10px;
+  font-size: 13px;
+  display: inline-block;
+  user-select: none;
+}
+
+@media (min-width: 768px) {
+  header {
+    flex-direction: row;
+    padding: 25px 20px;
+  }
+  
+  .logo {
+    position: absolute;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 0;
+  }
+  
+  h1 {
+    font-size: 25px;
+    margin: 0 auto;
+  }
+  
+  .editor {
+    height: 300px;
+  }
+  
+  .tabs {
+    padding: 10px;
+    gap: 20px;
+  }
+  
+  .tab-button {
+    font-size: 15px;
+    padding: 10px 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .tab-content {
+    padding: 15px;
+  }
+  
+  .modal-content {
+    padding: 20px;
+  }
 }

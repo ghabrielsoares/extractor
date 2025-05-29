@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>EXTRATOR PromQL</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -30,8 +30,8 @@
     <label>TAG</label>
     <p class="helper-text">
       Use vírgula, espaço ou quebra de linha para separar.<br>
-      Digite <code>&lt;tag&gt;</code> no título para incluir os valores.<br>
-      Use <code>&lt;v&gt;</code> ou <code>&lt;vazio&gt;</code> para representar tags "__auto".
+      Use <code>&lt;v&gt;</code> ou <code>&lt;vazio&gt;</code> para "__auto".<br>
+      Use <code>&lt;todos&gt;</code> ou <code>&lt;all&gt;</code> para incluir todas as TAGs automaticamente.
     </p>
     <div class="editor-wrapper">
       <textarea id="tagsInput" class="editor" placeholder="Ex: median, %loss, V'TAL, <v>"></textarea>
@@ -40,10 +40,13 @@
 
   <div class="tab-content" id="tituloTab">
     <label>TÍTULO</label>
-    <p class="helper-text">Você pode usar os seguintes placeholders:<br><code>&lt;nome do dashboard&gt;</code>, <code>&lt;inputs&gt;</code>, <code>&lt;tag&gt;</code></p>
+    <p class="helper-text">Você pode usar:<br><code>&lt;nome do dashboard&gt;</code>, <code>&lt;tag&gt;</code></p>
     <div class="editor-wrapper">
-      <textarea id="titleInput" class="editor" placeholder="Ex: <nome do dashboard>\nEste dashboard capta informações sobre <inputs>."></textarea>
+      <textarea id="titleInput" class="editor" placeholder="Ex: <nome do dashboard> Este dashboard capta informações sobre <inputs>."></textarea>
     </div>
+    <label class="checkbox-label">
+      <input type="checkbox" id="hideEmpty"> Não mostrar valores vazios
+    </label>
   </div>
 
   <div class="generate-button">

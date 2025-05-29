@@ -1,3 +1,4 @@
+// Tab switching
 document.querySelectorAll('.tab-button').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.tab-button').forEach(t => t.classList.remove('active'));
@@ -11,14 +12,10 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   const rawJson = document.getElementById("jsonInput").value.trim();
   const rawTags = document.getElementById("tagsInput").value.trim();
   const template = document.getElementById("titleInput").value.trim();
+  const hideEmpty = document.getElementById("hideEmpty").checked;
 
-  const tags = rawTags
-    .split(/[\n,\s,]+/)
-    .map(tag => {
-      const lower = tag.trim().toLowerCase();
-      return (lower === "<v>" || lower === "<vazio>") ? "__auto" : tag.trim();
-    })
-    .filter(Boolean);
+  let tags;
+  const isAll = /<todos>|<all>/i.test(rawTags);
 
   let json;
   try {
@@ -28,17 +25,43 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     return;
   }
 
+  if (isAll) {
+    tags = Array.from(
+      new Set(
+        extractPanels(json).flatMap(panel =>
+          panel.targets.map(t => t.legendFormat || '- -')
+        )
+      )
+    );
+  } else {
+    tags = rawTags
+      .split(/[\n,\s]+/)
+      .map(tag => {
+        const lower = tag.trim().toLowerCase();
+        return (lower === "<v>" || lower === "<vazio>") ? "__auto" : tag.trim();
+      })
+      .filter(Boolean);
+  }
+
   const dashTitle = findDashboardTitle(json) || "- -";
   const panels = extractPanels(json);
 
   const outputBlocks = panels.map(panel => {
-    const lines = [`${panel.title}`];
+    let lines = [];
+    let validLines = 0;
+
     tags.forEach(tag => {
       const match = panel.targets.find(t => t.legendFormat === tag);
-      lines.push(`PromQL ${tag}:\n\`\`\`PromQL\n${match ? match.expr : '- -'}\n\`\`\``);
+      const expr = match?.expr?.trim() || "- -";
+      if (hideEmpty && expr === "- -") return; // pula esse PromQL
+      lines.push(`PromQL ${tag}:\n\`\`\`PromQL\n${expr}\n\`\`\``);
+      if (expr !== "- -") validLines++;
     });
-    return lines.join('\n') + '\n---';
-  });
+
+    if (hideEmpty && validLines === 0) return null;
+
+    return `${panel.title}\n${lines.join('\n')}\n---`;
+  }).filter(Boolean);
 
   const header = template
     .replace('<nome do dashboard>', dashTitle)
@@ -112,3 +135,8 @@ function extractPanels(obj, results = []) {
   }
   return results;
 }
+
+// Ajuste para redimensionamento
+window.addEventListener('resize', function() {
+  // Pode adicionar lógica adicional se necessário
+});
