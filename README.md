@@ -1,6 +1,6 @@
 <p align="right">
   <a href="#ex-trator-promql-pt-br">🇧🇷 Português-BR</a> |
-  <a href="#ex-trator-promql-en">🇺🇸 English</a>
+  <a href="#ex-trator-promql-en">🇺🇸 English</a> |
   <a href="#ex-trator-promql-imgs">IMAGENS / IMAGES</a>
 </p>
 
