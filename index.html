@@ -1,71 +1,89 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>EXTRATOR</title>
+  <title>EXTRACTOR</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+  <!-- EN: Header with logo and title -->
+  <!-- PT-BR: Cabeçalho com logo e título -->
   <header>
-    <img src="icons/code.png" alt="Logo" class="logo">
-    <h1>EXTRATOR</h1>
+    <img src="imgs/icons/code.png" alt="Logo" class="logo">
+    <h1>EXTRACTOR</h1>
   </header>
 
+  <!-- EN: Tab navigation -->
+  <!-- PT-BR: Navegação por abas -->
   <div class="tabs">
     <button class="tab-button active" data-tab="jsonTab">JSON</button>
     <button class="tab-button" data-tab="tagTab">TAG</button>
-    <button class="tab-button" data-tab="tituloTab">TÍTULO</button>
+    <button class="tab-button" data-tab="titleTab">TITLE</button>
   </div>
 
+  <!-- EN: JSON input tab -->
+  <!-- PT-BR: Aba de entrada JSON -->
   <div class="tab-content active" id="jsonTab">
     <label>JSON</label>
     <div class="editor-wrapper">
-      <textarea id="jsonInput" class="editor" placeholder="Cole aqui o conteúdo do JSON"></textarea>
+      <textarea id="jsonInput" class="editor" placeholder="Paste the exported Grafana JSON here"></textarea>
     </div>
   </div>
 
+  <!-- EN: Tag filtering tab -->
+  <!-- PT-BR: Aba de filtragem por TAG -->
   <div class="tab-content" id="tagTab">
     <label>TAG</label>
     <p class="helper-text">
-      Use vírgula, espaço ou quebra de linha para separar.<br>
-      Use <code>&lt;v&gt;</code> ou <code>&lt;vazio&gt;</code> para "__auto".<br>
-      Use <code>&lt;todos&gt;</code> ou <code>&lt;all&gt;</code> para incluir todas as TAGs automaticamente.
+      Use comma, space or line break to separate.<br>
+      Use <code>&lt;v&gt;</code> or <code>&lt;empty&gt;</code> to match "__auto".<br>
+      Use <code>&lt;all&gt;</code> or <code>&lt;todos&gt;</code> to auto-include all tags.
     </p>
     <div class="editor-wrapper">
       <textarea id="tagsInput" class="editor" placeholder="Ex: median, %loss, V'TAL, <v>"></textarea>
     </div>
   </div>
 
-  <div class="tab-content" id="tituloTab">
-    <label>TÍTULO</label>
-    <p class="helper-text">Você pode usar:<br><code>&lt;nome do dashboard&gt;</code>, <code>&lt;tag&gt;</code></p>
+  <!-- EN: Output template/title input tab -->
+  <!-- PT-BR: Aba de entrada de título/template -->
+  <div class="tab-content" id="titleTab">
+    <label>TITLE</label>
+    <p class="helper-text">
+      You can use:<br>
+      <code>&lt;dashboard name&gt;</code>, <code>&lt;tag&gt;</code>
+    </p>
     <div class="editor-wrapper">
-      <textarea id="titleInput" class="editor" placeholder="Ex: <nome do dashboard> Este dashboard capta informações sobre <inputs>."></textarea>
+      <textarea id="titleInput" class="editor" placeholder="Ex: <dashboard name> This dashboard provides metrics on <tag>."></textarea>
     </div>
     <label class="checkbox-label">
-      <input type="checkbox" id="hideEmpty"> Não mostrar valores vazios
+      <input type="checkbox" id="hideEmpty"> Do not display empty values
     </label>
   </div>
 
+  <!-- EN: Generate output button -->
+  <!-- PT-BR: Botão de gerar saída -->
   <div class="generate-button">
-    <button id="generateBtn">GERAR</button>
+    <button id="generateBtn">GENERATE</button>
   </div>
 
-  <!-- Modal -->
+  <!-- EN: Output modal -->
+  <!-- PT-BR: Modal de saída -->
   <div id="outputModal" class="modal hidden">
     <div class="modal-content">
       <div class="modal-header">
-        <span class="icon-label">MD</span><img src="icons/downloads.png" alt="MD" id="downloadMd" class="icon-btn" title="Download .md">
-        <span class="icon-label">TXT</span><img src="icons/downloads.png" alt="TXT" id="downloadTxt" class="icon-btn" title="Download .txt">
-        <img src="icons/copy_azul.png" alt="Copiar" id="copyBtn" class="icon-btn" title="Copiar saída">
-        <img src="icons/delete.png" alt="Fechar" id="closeModal" class="icon-btn" title="Fechar">
+        <span class="icon-label">MD</span><img src="imgs/icons/downloads.png" alt="Download MD" id="downloadMd" class="icon-btn" title="Download .md">
+        <span class="icon-label">TXT</span><img src="imgs/icons/downloads.png" alt="Download TXT" id="downloadTxt" class="icon-btn" title="Download .txt">
+        <img src="imgs/icons/copy_azul.png" alt="Copy" id="copyBtn" class="icon-btn" title="Copy output">
+        <img src="imgs/icons/delete.png" alt="Close" id="closeModal" class="icon-btn" title="Close">
       </div>
       <div id="outputText" class="output-area" contenteditable="true"></div>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <!-- EN: App entry point -->
+  <!-- PT-BR: Ponto de entrada da aplicação -->
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
