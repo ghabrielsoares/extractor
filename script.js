@@ -29,7 +29,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     tags = Array.from(
       new Set(
         extractPanels(json).flatMap(panel =>
-          panel.targets.map(t => t.legendFormat || '- -')
+          panel.prometheus.map(t => t.legendFormat || '- -')
         )
       )
     );
@@ -46,22 +46,53 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   const dashTitle = findDashboardTitle(json) || "- -";
   const panels = extractPanels(json);
 
-  const outputBlocks = panels.map(panel => {
-    let lines = [];
-    let validLines = 0;
+const outputBlocks = panels.map(panel => {
+  let blocos = [];
 
-    tags.forEach(tag => {
-      const match = panel.targets.find(t => t.legendFormat === tag);
-      const expr = match?.expr?.trim() || "- -";
-      if (hideEmpty && expr === "- -") return; // pula esse PromQL
-      lines.push(`PromQL ${tag}:\n\`\`\`PromQL\n${expr}\n\`\`\``);
-      if (expr !== "- -") validLines++;
-    });
+  blocos.push(`Painel: ${panel.painel}`);
 
-    if (hideEmpty && validLines === 0) return null;
+  // ZABBIX
+  panel.zabbix.forEach(zbx => {
+    if (
+      hideEmpty &&
+      zbx.refId === "<vazio>" &&
+      zbx.group === "<vazio>" &&
+      zbx.host === "<vazio>" &&
+      zbx.item === "<vazio>" &&
+      zbx.alias === "<vazio>"
+    ) return;
 
-    return `${panel.title}\n${lines.join('\n')}\n---`;
-  }).filter(Boolean);
+    const zabbixBloco = [
+      `- ITEM DE COLETA ZABBIX -`,
+      `Titulo:\n\`\`\`\n${zbx.refId}\n\`\`\``,
+      `Group:\n\`\`\`\n${zbx.group}\n\`\`\``,
+      `Host:\n\`\`\`\n${zbx.host}\n\`\`\``,
+      `Item:\n\`\`\`\n${zbx.item}\n\`\`\``,
+      `setAlias:\n\`\`\`\n${zbx.alias}\n\`\`\``,
+      `---`
+    ].join('\n');
+    blocos.push(zabbixBloco);
+  });
+
+  // PROMETHEUS
+  tags.forEach(tag => {
+    const match = panel.prometheus.find(t => t.legendFormat === tag);
+    const expr = match?.expr?.trim() || "- -";
+
+    if (hideEmpty && expr === "- -") return;
+
+    const blocoPrometheus = [
+      `- ITEM DE COLETA PROMETHEUS -`,
+      `PromQL ${tag}:\n\`\`\`PromQL\n${expr}\n\`\`\``,
+      `---`
+    ].join('\n\n');
+
+    blocos.push(blocoPrometheus);
+  });
+
+  return blocos.length ? blocos.join('\n\n') : null;
+}).filter(Boolean);
+
 
   const header = template
     .replace('<nome do dashboard>', dashTitle)
@@ -73,7 +104,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   document.getElementById("outputModal").classList.remove("hidden");
 });
 
-// Modal
+// Modal controls
 document.getElementById("closeModal").addEventListener("click", () => {
   document.getElementById("outputModal").classList.add("hidden");
 });
@@ -116,27 +147,45 @@ function findDashboardTitle(obj) {
   return null;
 }
 
+// 🔍 Detecta e separa PROMETHEUS e ZABBIX
 function extractPanels(obj, results = []) {
   if (Array.isArray(obj)) {
     obj.forEach(item => extractPanels(item, results));
   } else if (typeof obj === 'object' && obj !== null) {
     if (obj.targets && Array.isArray(obj.targets)) {
+      const prometheusTargets = [];
+      const zabbixTargets = [];
+
+      obj.targets.forEach(target => {
+        const type = (target?.datasource?.type || '').toLowerCase();
+        if (type.includes("zabbix")) {
+          zabbixTargets.push({
+            refId: target.refId || "<vazio>",
+            group: target.group?.filter?.trim() || "<vazio>",
+            host: target.host?.filter?.trim() || "<vazio>",
+            item: target.item?.filter?.trim() || "<vazio>",
+            alias: target.functions?.[0]?.params?.[0] || "<vazio>"
+          });
+        } else {
+          prometheusTargets.push({
+            legendFormat: target.legendFormat || "- -",
+            expr: target.expr || "- -"
+          });
+        }
+      });
+
       results.push({
-        title: obj.title || "- -",
-        targets: obj.targets.map(t => ({
-          legendFormat: t.legendFormat || "- -",
-          expr: t.expr || "- -"
-        }))
+        painel: obj.title || "<vazio>",
+        prometheus: prometheusTargets,
+        zabbix: zabbixTargets
       });
     }
+
     for (const key in obj) {
       extractPanels(obj[key], results);
     }
   }
+
   return results;
 }
 
-// Ajuste para redimensionamento
-window.addEventListener('resize', function() {
-  // Pode adicionar lógica adicional se necessário
-});
