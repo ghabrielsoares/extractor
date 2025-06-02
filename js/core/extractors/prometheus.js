@@ -12,7 +12,9 @@ export function extractPrometheusTargets(targets) {
       return !type.includes("zabbix");
     })
     .map(t => ({
-      legendFormat: t.legendFormat || "- -",
-      expr: t.expr || "- -"
+      refId: t.refId || "<empty>",
+      legendFormat: t.legendFormat || "<empty>",
+      expr: t.expr || "<empty>"
     }));
 }
+

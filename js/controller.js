@@ -28,13 +28,13 @@ function handleGenerate() {
 
   const service = new DashboardService();
 
-  const tags = service.parseTags(input.tags, jsonData);
+  const labels = service.parseLabels(input.labels, jsonData);
   const panels = service.extractPanels(jsonData);
   const dashboardTitle = service.findDashboardTitle(jsonData) || "<empty>";
 
   const output = service.buildOutput(
     panels,
-    tags,
+    labels,
     input.hideEmpty,
     input.template,
     dashboardTitle

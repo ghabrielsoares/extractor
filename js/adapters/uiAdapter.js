@@ -4,7 +4,7 @@
 export function getUserInput() {
   return {
     json: document.getElementById("jsonInput").value.trim(),
-    tags: document.getElementById("tagsInput").value.trim(),
+    labels: document.getElementById("labelsInput").value.trim(),
     template: document.getElementById("titleInput").value.trim(),
     hideEmpty: document.getElementById("hideEmpty").checked
   };

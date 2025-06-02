@@ -6,26 +6,26 @@ import { extractZabbixTargets } from './extractors/zabbix.js';
 import { DashboardPort } from '../ports/dashboardPort.js';
 
 export class DashboardService extends DashboardPort {
-  parseTags(rawTags, jsonData) {
-    const isAll = /<todos>|<all>/i.test(rawTags);
+  parseLabels(rawLabels, jsonData) {
+    const isAll = /<todos>|<all>/i.test(rawLabels);
     if (isAll) {
       const panels = this.extractPanels(jsonData);
-      return Array.from(
-        new Set(
-          panels.flatMap(panel =>
-            panel.prometheus.map(t => t.legendFormat || "- -")
-          )
-        )
+      const prometheusLabels = panels.flatMap(panel =>
+        panel.prometheus.flatMap(p => [p.legendFormat, p.refId])
       );
+      const zabbixLabels = panels.flatMap(panel =>
+        panel.zabbix.flatMap(z => [z.alias, z.refId])
+      );
+      return Array.from(new Set([...prometheusLabels, ...zabbixLabels]));
     }
 
-    return rawTags
+    return rawLabels
       .split(/[\n,\s,]+/)
-      .map(tag => {
-        const lower = tag.trim().toLowerCase();
+      .map(label => {
+        const lower = label.trim().toLowerCase();
         return lower === "<v>" || lower === "<vazio>" || lower === "<empty>"
           ? "__auto"
-          : tag.trim();
+          : label.trim();
       })
       .filter(Boolean);
   }
@@ -59,20 +59,56 @@ export class DashboardService extends DashboardPort {
     return null;
   }
 
-  buildOutput(panels, tags, hideEmpty, template, dashboardTitle) {
+  buildOutput(panels, labels, hideEmpty, template, dashboardTitle) {
+    // AGRUPAMENTO PARA <tag>
+    const prometheusTitles = [];
+    const prometheusLegends = [];
+    const zabbixTitles = [];
+    const zabbixAliases = [];
+
+    panels.forEach(panel => {
+      panel.prometheus.forEach(p => {
+        if (p.refId && p.refId !== "<empty>") prometheusTitles.push(p.refId);
+        if (p.legendFormat && p.legendFormat !== "<empty>") prometheusLegends.push(p.legendFormat);
+      });
+
+      panel.zabbix.forEach(z => {
+        if (z.refId && z.refId !== "<empty>") zabbixTitles.push(z.refId);
+        if (z.alias && z.alias !== "<empty>") zabbixAliases.push(z.alias);
+      });
+    });
+
+    const tagSection = [
+      "ZABBIX",
+      "TITLES FOUND:",
+      zabbixTitles.join(', ') || "<none>",
+      "",
+      "setAlias FOUND:",
+      zabbixAliases.join(', ') || "<none>",
+      "",
+      "PROMETHEUS",
+      "TITLES FOUND:",
+      prometheusTitles.join(', ') || "<none>",
+      "",
+      "LEGENDS FOUND:",
+      prometheusLegends.join(', ') || "<none>"
+    ].join("\n");
+
     const header = template
       .replace('<dashboard name>', dashboardTitle)
-      .replace('<inputs>', tags.join(', '))
-      .replace('<tag>', tags.join(', '));
+      .replace('<inputs>', labels.join(', '))
+      .replace('<label>', tagSection);
 
     const outputBlocks = panels.map(panel => {
       let section = [`Panel: ${panel.panelTitle}`];
 
       // ZABBIX SECTION
       panel.zabbix.forEach(zbx => {
+        const labelMatches = labels.includes(zbx.refId) || labels.includes(zbx.alias);
         const allEmpty = [zbx.refId, zbx.group, zbx.host, zbx.item, zbx.alias]
           .every(value => value === "<empty>");
         if (hideEmpty && allEmpty) return;
+        if (!labelMatches && labels.length > 0) return;
 
         section.push([
           "- ZABBIX DATA ITEM -",
@@ -86,15 +122,17 @@ export class DashboardService extends DashboardPort {
       });
 
       // PROMETHEUS SECTION
-      tags.forEach(tag => {
-        const match = panel.prometheus.find(p => p.legendFormat === tag);
-        const expr = match?.expr?.trim() || "- -";
-
+      panel.prometheus.forEach(pmt => {
+        const labelMatches = labels.includes(pmt.legendFormat) || labels.includes(pmt.refId);
+        const expr = pmt.expr?.trim() || "- -";
         if (hideEmpty && expr === "- -") return;
+        if (!labelMatches && labels.length > 0) return;
 
         section.push([
           "- PROMETHEUS DATA ITEM -",
-          `PromQL ${tag}:\n\`\`\`PromQL\n${expr}\n\`\`\``,
+          `Title:\n\`\`\`\n${pmt.refId}\n\`\`\``,
+          `Legenda:\n\`\`\`\n${pmt.legendFormat}\n\`\`\``,
+          `PromQL:\n\`\`\`PromQL\n${expr}\n\`\`\``,
           "---"
         ].join("\n\n"));
       });

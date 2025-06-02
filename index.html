@@ -19,7 +19,7 @@
   <!-- PT-BR: Navegação por abas -->
   <div class="tabs">
     <button class="tab-button active" data-tab="jsonTab">JSON</button>
-    <button class="tab-button" data-tab="tagTab">TAG</button>
+    <button class="tab-button" data-tab="labelTab">LABEL</button>
     <button class="tab-button" data-tab="titleTab">TITLE</button>
   </div>
 
@@ -32,19 +32,20 @@
     </div>
   </div>
 
-  <!-- EN: Tag filtering tab -->
-  <!-- PT-BR: Aba de filtragem por TAG -->
-  <div class="tab-content" id="tagTab">
-    <label>TAG</label>
+  <!-- EN: Label filtering tab -->
+  <!-- PT-BR: Aba de filtragem por LABEL -->
+  <div class="tab-content" id="labelTab">
+    <label>LABEL</label>
     <p class="helper-text">
       Use comma, space or line break to separate.<br>
       Use <code>&lt;v&gt;</code> or <code>&lt;empty&gt;</code> to match "__auto".<br>
-      Use <code>&lt;all&gt;</code> or <code>&lt;todos&gt;</code> to auto-include all tags.
+      Use <code>&lt;all&gt;</code> or <code>&lt;todos&gt;</code> to auto-include all labels.
     </p>
     <div class="editor-wrapper">
-      <textarea id="tagsInput" class="editor" placeholder="Ex: median, %loss, V'TAL, <v>"></textarea>
+      <textarea id="labelsInput" class="editor" placeholder="Ex: median, %loss, V'TAL, <v>"></textarea>
     </div>
   </div>
+
 
   <!-- EN: Output template/title input tab -->
   <!-- PT-BR: Aba de entrada de título/template -->
@@ -52,10 +53,10 @@
     <label>TITLE</label>
     <p class="helper-text">
       You can use:<br>
-      <code>&lt;dashboard name&gt;</code>, <code>&lt;tag&gt;</code>
+      <code>&lt;dashboard name&gt;</code>, <code>&lt;label&gt;</code>
     </p>
     <div class="editor-wrapper">
-      <textarea id="titleInput" class="editor" placeholder="Ex: <dashboard name> This dashboard provides metrics on <tag>."></textarea>
+      <textarea id="titleInput" class="editor" placeholder="Ex: <dashboard name> This dashboard provides metrics on <label>."></textarea>
     </div>
     <label class="checkbox-label">
       <input type="checkbox" id="hideEmpty"> Do not display empty values
