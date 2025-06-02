@@ -62,9 +62,19 @@ export class DashboardService extends DashboardPort {
   }
 
   buildOutput(panels, labels, hideEmpty, template, dashboardTitle) {
-    const { panel, title, legend, group, host, item, zabbixTitles, zabbixAliases, prometheusTitles, prometheusLegends } = this.outputLabels;
+    const {
+      panel,
+      title,
+      legend,
+      group,
+      host,
+      item,
+      zabbixTitles,
+      zabbixAliases,
+      prometheusTitles,
+      prometheusLegends
+    } = this.outputLabels;
 
-    // AGRUPAMENTO PARA BLOCO <label>
     const prometheusTitlesArr = [];
     const prometheusLegendsArr = [];
     const zabbixTitlesArr = [];
@@ -82,21 +92,49 @@ export class DashboardService extends DashboardPort {
       });
     });
 
-    const labelSection = [
-      "ZABBIX",
-      `${zabbixTitles}:`,
-      zabbixTitlesArr.join(', ') || "<none>",
-      "",
-      `${zabbixAliases}:`,
-      zabbixAliasesArr.join(', ') || "<none>",
-      "",
-      "PROMETHEUS",
-      `${prometheusTitles}:`,
-      prometheusTitlesArr.join(', ') || "<none>",
-      "",
-      `${prometheusLegends}:`,
-      prometheusLegendsArr.join(', ') || "<none>"
-    ].join("\n");
+    // === NOVA LÓGICA: OCULTAR CAMPOS VAZIOS NO BLOCO <label> ===
+    const zabbixLines = [];
+    const prometheusLines = [];
+
+    const zabbixTitlesSet = [...new Set(zabbixTitlesArr)];
+    const zabbixAliasesSet = [...new Set(zabbixAliasesArr)];
+
+    if (zabbixTitlesSet.length > 0 || zabbixAliasesSet.length > 0) {
+      zabbixLines.push("ZABBIX");
+
+      if (zabbixTitlesSet.length > 0) {
+        zabbixLines.push(`${zabbixTitles}:`);
+        zabbixLines.push(zabbixTitlesSet.join(', '));
+        zabbixLines.push("");
+      }
+
+      if (zabbixAliasesSet.length > 0) {
+        zabbixLines.push(`${zabbixAliases}:`);
+        zabbixLines.push(zabbixAliasesSet.join(', '));
+        zabbixLines.push("");
+      }
+    }
+
+    const prometheusTitlesSet = [...new Set(prometheusTitlesArr)];
+    const prometheusLegendsSet = [...new Set(prometheusLegendsArr)];
+
+    if (prometheusTitlesSet.length > 0 || prometheusLegendsSet.length > 0) {
+      prometheusLines.push("PROMETHEUS");
+
+      if (prometheusTitlesSet.length > 0) {
+        prometheusLines.push(`${prometheusTitles}:`);
+        prometheusLines.push(prometheusTitlesSet.join(', '));
+        prometheusLines.push("");
+      }
+
+      if (prometheusLegendsSet.length > 0) {
+        prometheusLines.push(`${prometheusLegends}:`);
+        prometheusLines.push(prometheusLegendsSet.join(', '));
+        prometheusLines.push("");
+      }
+    }
+
+    const labelSection = [...zabbixLines, ...prometheusLines].join("\n").trim();
 
     const header = template
       .replace('<dashboard name>', dashboardTitle)
@@ -106,39 +144,68 @@ export class DashboardService extends DashboardPort {
     const outputBlocks = panels.map(panel => {
       let section = [`${panel ? panel.panelTitle ? `${panel}: ${panel.panelTitle}` : `${panel}: <empty>` : "<empty>"}`];
 
-      // ZABBIX SECTION
+      // ZABBIX
       panel.zabbix.forEach(zbx => {
         const labelMatches = labels.includes(zbx.refId) || labels.includes(zbx.alias);
         const allEmpty = [zbx.refId, zbx.group, zbx.host, zbx.item, zbx.alias]
-          .every(value => value === "<empty>");
+          .every(v => v === "<empty>" || v === "<none>");
         if (hideEmpty && allEmpty) return;
         if (!labelMatches && labels.length > 0) return;
 
-        section.push([
-          "- ZABBIX DATA ITEM -",
-          `${title}:\n\`\`\`\n${zbx.refId}\n\`\`\``,
-          `${group}:\n\`\`\`\n${zbx.group}\n\`\`\``,
-          `${host}:\n\`\`\`\n${zbx.host}\n\`\`\``,
-          `${item}:\n\`\`\`\n${zbx.item}\n\`\`\``,
-          `setAlias:\n\`\`\`\n${zbx.alias}\n\`\`\``,
-          "---"
-        ].join("\n"));
+        const itemBlock = ["- ZABBIX DATA ITEM -"];
+
+        if (!hideEmpty || zbx.refId !== "<empty>") {
+          itemBlock.push(`${title}:\n\`\`\`\n${zbx.refId}\n\`\`\``);
+        }
+
+        if (!hideEmpty || zbx.group !== "<empty>") {
+          itemBlock.push(`${group}:\n\`\`\`\n${zbx.group}\n\`\`\``);
+        }
+
+        if (!hideEmpty || zbx.host !== "<empty>") {
+          itemBlock.push(`${host}:\n\`\`\`\n${zbx.host}\n\`\`\``);
+        }
+
+        if (!hideEmpty || zbx.item !== "<empty>") {
+          itemBlock.push(`${item}:\n\`\`\`\n${zbx.item}\n\`\`\``);
+        }
+
+        if (!hideEmpty || zbx.alias !== "<empty>") {
+          itemBlock.push(`setAlias:\n\`\`\`\n${zbx.alias}\n\`\`\``);
+        }
+
+        itemBlock.push("---");
+        section.push(itemBlock.join("\n\n"));
       });
 
-      // PROMETHEUS SECTION
+      // PROMETHEUS
       panel.prometheus.forEach(pmt => {
         const labelMatches = labels.includes(pmt.legendFormat) || labels.includes(pmt.refId);
-        const expr = pmt.expr?.trim() || "- -";
-        if (hideEmpty && expr === "- -") return;
+        const expr = pmt.expr?.trim() || "<empty>";
+        const isExprEmpty = expr === "<empty>";
+        const isLegendEmpty = pmt.legendFormat === "<empty>";
+        const isTitleEmpty = pmt.refId === "<empty>";
+
+        const shouldHideAll = hideEmpty && isExprEmpty && isLegendEmpty && isTitleEmpty;
+        if (shouldHideAll) return;
         if (!labelMatches && labels.length > 0) return;
 
-        section.push([
-          "- PROMETHEUS DATA ITEM -",
-          `${title}:\n\`\`\`\n${pmt.refId}\n\`\`\``,
-          `${legend}:\n\`\`\`\n${pmt.legendFormat}\n\`\`\``,
-          `PromQL:\n\`\`\`PromQL\n${expr}\n\`\`\``,
-          "---"
-        ].join("\n\n"));
+        const itemBlock = ["- PROMETHEUS DATA ITEM -"];
+
+        if (!hideEmpty || !isTitleEmpty) {
+          itemBlock.push(`${title}:\n\`\`\`\n${pmt.refId}\n\`\`\``);
+        }
+
+        if (!hideEmpty || !isLegendEmpty) {
+          itemBlock.push(`${legend}:\n\`\`\`\n${pmt.legendFormat}\n\`\`\``);
+        }
+
+        if (!hideEmpty || !isExprEmpty) {
+          itemBlock.push(`PromQL:\n\`\`\`PromQL\n${expr}\n\`\`\``);
+        }
+
+        itemBlock.push("---");
+        section.push(itemBlock.join("\n\n"));
       });
 
       return section.length > 1 ? section.join("\n\n") : null;
