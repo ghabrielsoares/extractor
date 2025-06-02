@@ -55,6 +55,25 @@ h1 {
   margin: 0 auto;
 }
 
+/* === MULTI LANGUAGE SUPPORT === */
+.ls-button{
+  border-radius: 0.9vh;
+  border: none;
+}
+
+#languageSelector {
+  display: flex;
+  justify-content: center;
+  margin-top: 2vh;
+}
+
+#langSelect{
+  background-color: var(--panel);
+  color: var(--text);
+  font-size: var(--font-s);
+}
+
+
 /* === TABS === */
 .tabs {
   display: flex;
