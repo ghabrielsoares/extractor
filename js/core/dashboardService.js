@@ -1,11 +1,13 @@
-// EN: Main dashboard service (implements DashboardPort)
-// PT-BR: Serviço principal do dashboard (implementa DashboardPort)
-
 import { extractPrometheusTargets } from './extractors/prometheus.js';
 import { extractZabbixTargets } from './extractors/zabbix.js';
 import { DashboardPort } from '../ports/dashboardPort.js';
 
 export class DashboardService extends DashboardPort {
+  constructor(outputLabels) {
+    super();
+    this.outputLabels = outputLabels;
+  }
+
   parseLabels(rawLabels, jsonData) {
     const isAll = /<todos>|<all>/i.test(rawLabels);
     if (isAll) {
@@ -60,47 +62,49 @@ export class DashboardService extends DashboardPort {
   }
 
   buildOutput(panels, labels, hideEmpty, template, dashboardTitle) {
-    // AGRUPAMENTO PARA <tag>
-    const prometheusTitles = [];
-    const prometheusLegends = [];
-    const zabbixTitles = [];
-    const zabbixAliases = [];
+    const { panel, title, legend, group, host, item, zabbixTitles, zabbixAliases, prometheusTitles, prometheusLegends } = this.outputLabels;
+
+    // AGRUPAMENTO PARA BLOCO <label>
+    const prometheusTitlesArr = [];
+    const prometheusLegendsArr = [];
+    const zabbixTitlesArr = [];
+    const zabbixAliasesArr = [];
 
     panels.forEach(panel => {
       panel.prometheus.forEach(p => {
-        if (p.refId && p.refId !== "<empty>") prometheusTitles.push(p.refId);
-        if (p.legendFormat && p.legendFormat !== "<empty>") prometheusLegends.push(p.legendFormat);
+        if (p.refId && p.refId !== "<empty>") prometheusTitlesArr.push(p.refId);
+        if (p.legendFormat && p.legendFormat !== "<empty>") prometheusLegendsArr.push(p.legendFormat);
       });
 
       panel.zabbix.forEach(z => {
-        if (z.refId && z.refId !== "<empty>") zabbixTitles.push(z.refId);
-        if (z.alias && z.alias !== "<empty>") zabbixAliases.push(z.alias);
+        if (z.refId && z.refId !== "<empty>") zabbixTitlesArr.push(z.refId);
+        if (z.alias && z.alias !== "<empty>") zabbixAliasesArr.push(z.alias);
       });
     });
 
-    const tagSection = [
+    const labelSection = [
       "ZABBIX",
-      "TITLES FOUND:",
-      zabbixTitles.join(', ') || "<none>",
+      `${zabbixTitles}:`,
+      zabbixTitlesArr.join(', ') || "<none>",
       "",
-      "setAlias FOUND:",
-      zabbixAliases.join(', ') || "<none>",
+      `${zabbixAliases}:`,
+      zabbixAliasesArr.join(', ') || "<none>",
       "",
       "PROMETHEUS",
-      "TITLES FOUND:",
-      prometheusTitles.join(', ') || "<none>",
+      `${prometheusTitles}:`,
+      prometheusTitlesArr.join(', ') || "<none>",
       "",
-      "LEGENDS FOUND:",
-      prometheusLegends.join(', ') || "<none>"
+      `${prometheusLegends}:`,
+      prometheusLegendsArr.join(', ') || "<none>"
     ].join("\n");
 
     const header = template
       .replace('<dashboard name>', dashboardTitle)
       .replace('<inputs>', labels.join(', '))
-      .replace('<label>', tagSection);
+      .replace('<label>', labelSection);
 
     const outputBlocks = panels.map(panel => {
-      let section = [`Panel: ${panel.panelTitle}`];
+      let section = [`${panel ? panel.panelTitle ? `${panel}: ${panel.panelTitle}` : `${panel}: <empty>` : "<empty>"}`];
 
       // ZABBIX SECTION
       panel.zabbix.forEach(zbx => {
@@ -112,10 +116,10 @@ export class DashboardService extends DashboardPort {
 
         section.push([
           "- ZABBIX DATA ITEM -",
-          `Title:\n\`\`\`\n${zbx.refId}\n\`\`\``,
-          `Group:\n\`\`\`\n${zbx.group}\n\`\`\``,
-          `Host:\n\`\`\`\n${zbx.host}\n\`\`\``,
-          `Item:\n\`\`\`\n${zbx.item}\n\`\`\``,
+          `${title}:\n\`\`\`\n${zbx.refId}\n\`\`\``,
+          `${group}:\n\`\`\`\n${zbx.group}\n\`\`\``,
+          `${host}:\n\`\`\`\n${zbx.host}\n\`\`\``,
+          `${item}:\n\`\`\`\n${zbx.item}\n\`\`\``,
           `setAlias:\n\`\`\`\n${zbx.alias}\n\`\`\``,
           "---"
         ].join("\n"));
@@ -130,8 +134,8 @@ export class DashboardService extends DashboardPort {
 
         section.push([
           "- PROMETHEUS DATA ITEM -",
-          `Title:\n\`\`\`\n${pmt.refId}\n\`\`\``,
-          `Legenda:\n\`\`\`\n${pmt.legendFormat}\n\`\`\``,
+          `${title}:\n\`\`\`\n${pmt.refId}\n\`\`\``,
+          `${legend}:\n\`\`\`\n${pmt.legendFormat}\n\`\`\``,
           `PromQL:\n\`\`\`PromQL\n${expr}\n\`\`\``,
           "---"
         ].join("\n\n"));

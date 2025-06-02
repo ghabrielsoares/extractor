@@ -4,6 +4,7 @@
 import { DashboardService } from './core/dashboardService.js';
 import * as UI from './adapters/uiAdapter.js';
 import * as File from './adapters/fileAdapter.js';
+import { translations } from './core/supportLanguages.js';
 
 // EN: Initialize app and bind events
 // PT-BR: Inicializa o app e conecta os eventos
@@ -26,7 +27,10 @@ function handleGenerate() {
     return;
   }
 
-  const service = new DashboardService();
+  const lang = document.getElementById("langSelect").value;
+  const outputLabels = translations[lang].outputLabels;
+
+  const service = new DashboardService(outputLabels);
 
   const labels = service.parseLabels(input.labels, jsonData);
   const panels = service.extractPanels(jsonData);

@@ -12,6 +12,18 @@ Use <code>&lt;all&gt;</code> or <code>&lt;todos&gt;</code> to auto-include all l
     modalLabels: {
       md: "MD",
       txt: "TXT"
+    },
+    outputLabels: {
+      panel: "Panel",
+      title: "Title",
+      legend: "Legend",
+      group: "Group",
+      host: "Host",
+      item: "Item",
+      zabbixTitles: "TITLES FOUND",
+      zabbixAliases: "setAlias FOUND",
+      prometheusTitles: "TITLES FOUND",
+      prometheusLegends: "LEGENDS FOUND"
     }
   },
   pt: {
@@ -27,6 +39,18 @@ Use <code>&lt;all&gt;</code> ou <code>&lt;todos&gt;</code> para incluir todos au
     modalLabels: {
       md: "MD",
       txt: "TXT"
+    },
+    outputLabels: {
+      panel: "PAINEL",
+      title: "Título",
+      legend: "Legenda",
+      group: "Grupo",
+      host: "Host",
+      item: "Item",
+      zabbixTitles: "TÍTULOS ENCONTRADOS",
+      zabbixAliases: "setAlias ENCONTRADOS",
+      prometheusTitles: "TÍTULOS ENCONTRADOS",
+      prometheusLegends: "LEGENDAS ENCONTRADAS"
     }
   }
 };
@@ -42,21 +66,21 @@ export function applyLanguage(lang = "en") {
   document.querySelector('#labelTab label').textContent = t.labelLabel;
   document.querySelector('#labelTab .helper-text').innerHTML = t.labelHelper;
 
-  // Tab button text (TITLE)
+  // Tab button TITLE
   document.querySelector('[data-tab="titleTab"]').textContent = t.titleLabel;
 
-  // Checkbox text
+  // Checkbox
   document.querySelector('.checkbox-label').innerHTML = `
     <input type="checkbox" id="hideEmpty"> ${t.hideEmpty}
   `;
 
+  // Placeholder
+  document.getElementById('titleInput').placeholder = t.titlePlaceholder;
+
   // Generate button
   document.getElementById('generateBtn').textContent = t.generate;
 
-  // Placeholder do campo TITLE
-  document.getElementById('titleInput').placeholder = t.titlePlaceholder;
-
-  // Modal labels (MD / TXT)
+  // Modal labels
   document.querySelector('.modal-header .icon-label:nth-child(1)').textContent = t.modalLabels.md;
   document.querySelector('.modal-header .icon-label:nth-child(3)').textContent = t.modalLabels.txt;
 }
