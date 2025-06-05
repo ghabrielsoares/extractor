@@ -37,6 +37,11 @@
     <div class="editor-wrapper">
       <textarea id="jsonInput" class="editor" placeholder="Paste the exported Grafana JSON here"></textarea>
     </div>
+    <div class="file-upload-container">
+      <input type="file" id="jsonFileInput" accept=".json" style="display: none;">
+      <button id="uploadJsonButton" type="button">Carregar arquivo JSON</button>
+    </div>
+    <div id="filePreviewContainer" class="file-preview"></div>
   </div>
 
   <!-- EN: Label filtering tab -->

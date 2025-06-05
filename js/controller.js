@@ -14,6 +14,7 @@ export function initApp() {
   File.bindCopyButton();
   File.bindDownloadButtons();
   UI.bindGenerateButton(handleGenerate);
+  UI.bindJsonFileInput(File.readJsonFile); // NOVO
 }
 
 function handleGenerate() {
@@ -21,7 +22,9 @@ function handleGenerate() {
 
   let jsonData;
   try {
-    jsonData = JSON.parse(input.json);
+    // Se arquivo foi carregado, usar ele, senão usar textarea
+    const rawJson = window.loadedJsonFileContent?.trim() || input.json;
+    jsonData = JSON.parse(rawJson);
   } catch (e) {
     alert("Invalid JSON input.");
     return;

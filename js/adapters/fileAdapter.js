@@ -32,3 +32,12 @@ function downloadFile(filename) {
   link.download = filename;
   link.click();
 }
+
+// NOVO: Lê conteúdo de arquivo JSON
+export function readJsonFile(file, onLoadCallback) {
+  const reader = new FileReader();
+  reader.onload = function (event) {
+    onLoadCallback(event.target.result, file.name);
+  };
+  reader.readAsText(file);
+}

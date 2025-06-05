@@ -101,6 +101,58 @@ h1 {
   font-weight: bold;
 }
 
+/* === TAB JSON === */
+
+/* Estilo para o botão de upload */
+.file-upload-container button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.file-upload-container button:hover {
+  background-color: #0069d9;
+}
+
+/* Estilo para o container do preview do arquivo */
+.file-preview {
+  margin-top: 10px;
+}
+
+/* Estilo para cada item de anexo */
+.file-preview .file-item {
+  display: inline-flex;
+  align-items: center;
+  background-color: #06a180;
+  border: 1px solid #0fb997;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* Estilo para o ícone dentro do anexo */
+.file-preview .file-item .icon {
+  display: inline-block;
+  margin-right: 5px;
+  font-weight: bold;
+  color: #000000;
+}
+
+#jsonTab.dragging {
+  outline: 2px dashed #4a9bff;
+  background-color: #1a1a1a;
+}
+
+#jsonTab.dragging .editor-wrapper {
+  opacity: 0.5;
+}
+
+
+
 /* === TAB CONTENT === */
 .tab-content {
   display: none;
