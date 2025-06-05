@@ -187,4 +187,4 @@ Designed for:
 
 ---
 
-🛠 Projeto desenvolvido e mantido por **@ghabrielsoares**
+🛠 Projeto desenvolvido e mantido por: **@ghabrielsoares**
