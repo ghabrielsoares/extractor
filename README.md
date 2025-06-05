@@ -6,18 +6,18 @@
 
 ---
 
-# EXTRATOR — Versão 3.0.0
+# EXTRATOR — Versão 3.1.0
 
 ---
 
 ## 🇧🇷 EXTRATOR (PT-BR) <a name="extrator-pt-br"></a>
 
-**EXTRATOR** é uma ferramenta web avançada para extrair de forma inteligente e formatada expressões **PromQL** e dados de coleta **Zabbix** a partir de dashboards exportados do **Grafana**, agora com suporte multilíngue e filtros otimizados por **labels**.
+**EXTRATOR** é uma ferramenta web avançada para extrair de forma inteligente e formatada expressões **PromQL** e dados de coleta **Zabbix** a partir de dashboards exportados do **Grafana**, com suporte multilíngue, filtros otimizados por **labels** e interface interativa.
 
 ---
 
 ### 🎯 Objetivo do Projeto
-Modernizar a auditoria de dashboards Grafana, oferecendo uma experiência interativa e multilíngue com extração detalhada de dados Prometheus e Zabbix.
+Modernizar a auditoria de dashboards Grafana, oferecendo uma experiência fluida, offline, multilíngue e automatizada para extração de métricas Prometheus e Zabbix.
 
 ---
 
@@ -30,17 +30,14 @@ Ideal para:
 
 ---
 
-### 🆕 Novidades da versão 3.0.0
+### 🆕 Novidades da versão 3.1.0
 
-- 🌐 **Suporte multilíngue (EN / PT-BR)**
-- 🏷️ **Unificação de Tags como Labels**, aplicável a:
-  - `legendFormat` e `refId` (Prometheus)
-  - `setAlias` e `refId` (Zabbix)
-- 🧠 **Filtro por Label** mais inteligente e centralizado
-- 🧼 **Saída formatada com tradução dinâmica** por idioma
-- 🧾 Novo placeholder `<label>` para título/template
-- 🔄 Interface reativa sem recarregar a página
-- ✍️ Melhorias visuais e textuais na UI
+- 📎 **Upload de arquivo JSON por botão ou arrastar & soltar**
+- 💾 **Conteúdo do arquivo armazenado internamente**, sem sobrescrever o campo de texto
+- 🧩 **Preview visual do anexo**
+- 🧠 Campo de texto permanece disponível para edição manual opcional
+- 💡 Ajustes visuais e feedback durante o "drag & drop"
+- 🔁 Arquitetura mantida: **MVC + Hexagonal**
 
 ---
 
@@ -62,15 +59,14 @@ Ideal para:
 - Elimina trabalho manual repetitivo
 - Facilita auditoria e documentação técnica
 - Funciona offline
-- Visual clean e responsivo
-- Tradução dinâmica da interface e saída
+- Interface responsiva e multilíngue
 
 ---
 
 ### 🧱 Tecnologias Utilizadas
 
 - HTML5 + CSS3
-- JavaScript Vanilla (ES Modules)
+- JavaScript (ES Modules)
 - Arquitetura modular (MVC + Hexagonal)
 - Interface multilíngue com `supportLanguages.js`
 
@@ -96,44 +92,41 @@ Ideal para:
 
 ## 🇺🇸 EXTRATOR (EN) <a name="extrator-en"></a>
 
-**EXTRATOR** is a powerful web tool for intelligently extracting and formatting **PromQL** and **Zabbix collection data** from **Grafana dashboards**, now with multilingual support and advanced label filtering.
+**EXTRATOR** is a powerful web tool for intelligently extracting and formatting **PromQL** and **Zabbix** data from **Grafana dashboards**, now with drag & drop support and advanced internal JSON handling.
 
 ---
 
 ### 🎯 Project Goal
 
-Provide a modern, interactive interface for auditing Grafana dashboards with structured Prometheus and Zabbix data extraction — now in English and Portuguese-BR.
+Provide a modern, interactive interface for auditing Grafana dashboards with structured Prometheus and Zabbix extraction — fully offline, multilingual, and user-friendly.
 
 ---
 
 ### 🛠️ Purpose
 
-Built for:
+Designed for:
 
 - Network Engineers
 - NOC / SRE teams
-- Observability professionals
+- Infrastructure & Observability professionals
 
 ---
 
-### 🆕 What's New in Version 3.0.0
+### 🆕 What's New in Version 3.1.0
 
-- 🌐 **Multilanguage Support (EN / PT-BR)**
-- 🏷️ **Unified Labels** for filtering:
-  - `legendFormat` and `refId` (Prometheus)
-  - `setAlias` and `refId` (Zabbix)
-- 🧠 **Smarter label filtering**
-- 📌 Formatted output translated dynamically
-- ✍️ New `<label>` placeholder (replacing `<tag>`)
-- ⚡ Reactive UI with no page reload
-- 📎 Improved UI/UX experience
+- 📎 **Drag & drop JSON support**,
+- 📂 **Upload via button or drop area**
+- 🧠 JSON content is stored in memory (not overwritten in text box)
+- 🧾 **File preview UI** with `<>` icon and filename
+- ✍️ Text area remains available for manual edits
+- 🔁 Maintains clean **MVC + Hexagonal** architecture
 
 ---
 
 ### ⚙️ What It Does
 
 - Parses `.json` dashboards exported from Grafana
-- Detects both Prometheus and Zabbix targets
+- Detects Prometheus and Zabbix targets
 - Extracts:
   - Prometheus: `expr`, `legendFormat`, `refId`
   - Zabbix: `refId`, `group`, `host`, `item`, `setAlias`
@@ -146,9 +139,10 @@ Built for:
 ### 🚀 Practical Benefits
 
 - Reduces manual dashboard audits
-- Creates consistent technical reports
-- Works entirely offline
-- Multilingual support without reload
+- Creates consistent technical documentation
+- Fully offline and lightweight
+- Multilingual interface
+- Modern UX, drag-and-drop friendly
 
 ---
 
@@ -156,15 +150,15 @@ Built for:
 
 - HTML5 + CSS3
 - Vanilla JS (ES Modules)
-- MVC + Hexagonal architecture
-- `supportLanguages.js` for dynamic i18n
+- MVC + Hexagonal Architecture
+- `supportLanguages.js` for i18n
 
 ---
 
 ### 📌 Current Limitations
 
-- Only works with Grafana `.json` dashboards
-- Supports `Prometheus` and `Zabbix` datasources
+- Only supports Grafana `.json` dashboards
+- Prometheus and Zabbix datasources only
 
 ---
 
@@ -172,8 +166,8 @@ Built for:
 
 - Metric auditing
 - Zabbix / Prometheus validation
-- Internal documentation
-- Report standardization for critical teams
+- Technical documentation generation
+- Dashboard inspection for critical environments
 
 ---
 

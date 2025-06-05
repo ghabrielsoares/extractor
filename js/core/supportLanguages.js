@@ -1,5 +1,7 @@
 export const translations = {
   en: {
+    jsonPlaceholder:"Paste the exported Grafana JSON here",
+    uploadJSON: "Upload JSON file",
     titleLabel: "TITLE",
     titleHelper: `You can use:<br><code>&lt;dashboard name&gt;</code>, <code>&lt;label&gt;</code>`,
     titlePlaceholder: "Ex: <dashboard name> This dashboard provides metrics on <label>.",
@@ -27,6 +29,8 @@ Use <code>&lt;all&gt;</code> or <code>&lt;todos&gt;</code> to auto-include all l
     }
   },
   pt: {
+    jsonPlaceholder:"Cole o JSON exportado do Grafana aqui.",
+    uploadJSON: "Carregar arquivo JSON",
     titleLabel: "TÍTULO",
     titleHelper: `Você pode usar:<br><code>&lt;dashboard name&gt;</code>, <code>&lt;label&gt;</code>`,
     titlePlaceholder: "Ex: <dashboard name> Este dashboard apresenta métricas de <label>.",
@@ -74,13 +78,15 @@ export function applyLanguage(lang = "en") {
     <input type="checkbox" id="hideEmpty"> ${t.hideEmpty}
   `;
 
-  // Placeholder
+  // Placeholders
   document.getElementById('titleInput').placeholder = t.titlePlaceholder;
+  document.getElementById('jsonInput').placeholder = t.jsonPlaceholder; 
 
-  // Generate button
-  document.getElementById('generateBtn').textContent = t.generate;
+  // Botão de upload JSON
+  document.getElementById('uploadJsonButton').textContent = t.uploadJSON; 
 
   // Modal labels
   document.querySelector('.modal-header .icon-label:nth-child(1)').textContent = t.modalLabels.md;
   document.querySelector('.modal-header .icon-label:nth-child(3)').textContent = t.modalLabels.txt;
 }
+
