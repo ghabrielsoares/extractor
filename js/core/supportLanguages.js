@@ -15,6 +15,10 @@ Use <code>&lt;all&gt;</code> or <code>&lt;todos&gt;</code> to auto-include all l
       md: "MD",
       txt: "TXT"
     },
+    fileIndicator: {
+      file: "File",
+      of: "of"
+    },
     outputLabels: {
       panel: "Panel",
       title: "Title",
@@ -43,6 +47,10 @@ Use <code>&lt;all&gt;</code> ou <code>&lt;todos&gt;</code> para incluir todos au
     modalLabels: {
       md: "MD",
       txt: "TXT"
+    },
+    fileIndicator: {
+      file: "Arquivo",
+      of: "de"
     },
     outputLabels: {
       panel: "PAINEL",

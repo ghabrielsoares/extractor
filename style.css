@@ -285,6 +285,31 @@ h1 {
   white-space: pre-wrap;
 }
 
+
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.nav-btn {
+  background-color: transparent;
+  color: rgb(255, 255, 255);
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.file-indicator {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #ffffff;
+  margin-top: 0.5rem;
+}
+
+
+
 /* === CHECKBOX === */
 .checkbox-label {
   margin-top: 1vh;

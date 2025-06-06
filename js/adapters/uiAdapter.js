@@ -1,6 +1,9 @@
 // EN: UI Adapter - manages DOM interactions and events
 // PT-BR: Adaptador de UI - gerencia interações e eventos com o DOM
 
+// uiAdapter.js
+import { readMultipleJsonFiles } from './fileAdapter.js';
+
 export function getUserInput() {
   return {
     json: document.getElementById("jsonInput").value.trim(),
@@ -41,43 +44,21 @@ export function bindGenerateButton(callback) {
   document.getElementById("generateBtn").addEventListener("click", callback);
 }
 
-// NOVO: Lógica para upload de arquivo JSON (clique OU arraste)
-export function bindJsonFileInput(readCallback) {
+export function bindJsonFileInput() {
   const uploadButton = document.getElementById("uploadJsonButton");
   const fileInput = document.getElementById("jsonFileInput");
   const preview = document.getElementById("filePreviewContainer");
   const dropArea = document.getElementById("jsonTab");
 
-  function showPreview(name) {
-    preview.innerHTML = "";
-    const item = document.createElement("div");
-    item.className = "file-item";
-
-    const icon = document.createElement("span");
-    icon.className = "icon";
-    icon.textContent = "<>";
-
-    const filename = document.createElement("span");
-    filename.textContent = name;
-
-    item.appendChild(icon);
-    item.appendChild(filename);
-    preview.appendChild(item);
-  }
-
   uploadButton.addEventListener("click", () => fileInput.click());
 
   fileInput.addEventListener("change", () => {
-    const file = fileInput.files?.[0];
-    if (!file) return;
-
-    readCallback(file, (content, name) => {
-      window.loadedJsonFileContent = content;
-      showPreview(name);
-    });
+    const files = fileInput.files;
+    if (!files || files.length === 0) return;
+    showPreview(files);
+    readMultipleJsonFiles(files);
   });
 
-  // === DRAG & DROP ===
   dropArea.addEventListener("dragover", (e) => {
     e.preventDefault();
     dropArea.classList.add("dragging");
@@ -91,15 +72,35 @@ export function bindJsonFileInput(readCallback) {
     e.preventDefault();
     dropArea.classList.remove("dragging");
 
-    const file = e.dataTransfer.files?.[0];
-    if (!file || !file.name.endsWith(".json")) {
-      alert("Please drop a valid .json file.");
+    const files = e.dataTransfer.files;
+    if (!files || files.length === 0) return;
+
+    const jsonFiles = Array.from(files).filter(file => file.name.endsWith(".json"));
+    if (jsonFiles.length === 0) {
+      alert("Por favor, arraste apenas arquivos .json.");
       return;
     }
 
-    readCallback(file, (content, name) => {
-      window.loadedJsonFileContent = content;
-      showPreview(name);
-    });
+    showPreview(jsonFiles);
+    readMultipleJsonFiles(jsonFiles);
   });
+
+  function showPreview(files) {
+    preview.innerHTML = "";
+    Array.from(files).forEach(file => {
+      const item = document.createElement("div");
+      item.className = "file-item";
+
+      const icon = document.createElement("span");
+      icon.className = "icon";
+      icon.textContent = "<>";
+
+      const filename = document.createElement("span");
+      filename.textContent = file.name;
+
+      item.appendChild(icon);
+      item.appendChild(filename);
+      preview.appendChild(item);
+    });
+  }
 }

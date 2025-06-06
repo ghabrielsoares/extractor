@@ -6,7 +6,7 @@
 
 ---
 
-# EXTRATOR — Versão 3.1.0
+# EXTRATOR — Versão 4.0.0
 
 ---
 
@@ -30,13 +30,12 @@ Ideal para:
 
 ---
 
-### 🆕 Novidades da versão 3.1.0
+### 🆕 Novidades da versão 4.0.0
 
-- 📎 **Upload de arquivo JSON por botão ou arrastar & soltar**
-- 💾 **Conteúdo do arquivo armazenado internamente**, sem sobrescrever o campo de texto
-- 🧩 **Preview visual do anexo**
-- 🧠 Campo de texto permanece disponível para edição manual opcional
-- 💡 Ajustes visuais e feedback durante o "drag & drop"
+- 📂 **Suporte a múltiplos arquivos JSON** com navegação entre saídas
+- 🧭 **Botões de navegação (⭠ / ⭢)** para alternar entre os resultados gerados
+- 🗂 **Cada arquivo gera uma saída separada**, com indicador “Arquivo X de Y”
+- 🔒 **Maior controle sobre o fluxo de entrada e saída**, evitando sobrescrições acidentais
 - 🔁 Arquitetura mantida: **MVC + Hexagonal**
 
 ---
@@ -92,7 +91,7 @@ Ideal para:
 
 ## 🇺🇸 EXTRATOR (EN) <a name="extrator-en"></a>
 
-**EXTRATOR** is a powerful web tool for intelligently extracting and formatting **PromQL** and **Zabbix** data from **Grafana dashboards**, now with drag & drop support and advanced internal JSON handling.
+**EXTRATOR** is a powerful web tool for intelligently extracting and formatting **PromQL** and **Zabbix** data from **Grafana dashboards**, now with support for multi-file input and result navigation.
 
 ---
 
@@ -112,14 +111,13 @@ Designed for:
 
 ---
 
-### 🆕 What's New in Version 3.1.0
+### 🆕 What's New in Version 4.0.0
 
-- 📎 **Drag & drop JSON support**,
-- 📂 **Upload via button or drop area**
-- 🧠 JSON content is stored in memory (not overwritten in text box)
-- 🧾 **File preview UI** with `<>` icon and filename
-- ✍️ Text area remains available for manual edits
-- 🔁 Maintains clean **MVC + Hexagonal** architecture
+- 📂 **Support for multiple JSON files** with separate outputs
+- 🔀 **Navigation arrows (⭠ / ⭢)** to move between results
+- 🧾 **Each file produces its own report with indicator “File X of Y”**
+- 🔒 **Improved input/output flow with better control**
+- 🔁 Still powered by a clean **MVC + Hexagonal** architecture
 
 ---
 
